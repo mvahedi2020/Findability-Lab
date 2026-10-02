@@ -1,0 +1,58 @@
+import {useRef,useState,useEffect} from 'react'
+import {assets,initial,initialView,search,explain,queryMatch,apply,inverse,vocabulary,type Id,type Tag,type State,type View,type Edit} from './domain'
+import {read,write,type Read} from './storage'
+import {ReviewDialog} from './ReviewDialog'
+import {Evaluation} from './Evaluation'
+type Preview={edit:Edit|'reset';state:string;raw:string|null;context:string;kind:Read['kind']}
+export function App(){
+ const [loaded]=useState(read)
+ const [state,setState]=useState<State>(loaded.state)
+ const [view,setView]=useState<View>(initialView)
+ const [previousView,setPreviousView]=useState<View|null>(null)
+ const [selected,setSelected]=useState<Id|null>(null)
+ const [draft,setDraft]=useState<Tag[]|null>(null)
+ const [preview,setPreview]=useState<Preview|null>(null)
+ const [warning,setWarning]=useState(loaded.kind==='invalid'?'Saved sample is invalid. Its bytes are preserved. Review a reset to replace it.':loaded.kind==='unavailable'?'Storage unavailable. Changes stay in this tab; refresh may lose them.':'')
+ const [message,setMessage]=useState('')
+ const [evaluation,setEvaluation]=useState(false)
+ const searchInput=useRef<HTMLInputElement>(null)
+ const drawer=useRef<HTMLElement>(null)
+ const editor=useRef<HTMLFieldSetElement>(null)
+ const bench=useRef<HTMLElement>(null)
+ const trigger=useRef<HTMLElement|null>(null)
+ const results=search(state,view)
+ const context=JSON.stringify({selected,view})
+ function focusBack(){requestAnimationFrame(()=>{if(trigger.current?.isConnected)trigger.current.focus();else searchInput.current?.focus()})}
+ function changeView(next:View){setPreviousView(view);setView(next);setPreview(null);setMessage('Search view changed. Restore previous view is available.')}
+ function capture(edit:Edit|'reset'){
+  trigger.current=document.activeElement as HTMLElement
+  const current=read()
+  if(current.kind==='invalid'&&edit!=='reset'){setWarning('Saved sample is invalid. Its bytes are preserved. Review a reset to replace it.');setMessage('Change blocked by invalid saved data.');return}
+  setPreview({edit,state:JSON.stringify(state),raw:current.raw,context,kind:current.kind})
+ }
+ function confirm(){if(!preview)return;const current=read()
+  if(preview.state!==JSON.stringify(state)||preview.context!==context||(current.kind!=='unavailable'&&(current.raw!==preview.raw||preview.kind==='unavailable'))){setPreview(null);setMessage('Preview is stale. Saved data or context changed; review again.');if(current.kind==='invalid')setWarning('Saved sample is invalid. Its bytes are preserved. Review a reset to replace it.');focusBack();return}
+  if(current.kind==='invalid'&&preview.edit!=='reset'){setPreview(null);setWarning('Saved sample is invalid. Review a reset to replace it.');focusBack();return}
+  const next=preview.edit==='reset'?initial():apply(state,preview.edit)
+  const saved=write(next);setState(next);setPreview(null);setDraft(null)
+  setWarning(saved?'':'Storage unavailable. Change is in this tab only; refresh may lose it.')
+  setMessage(preview.edit==='reset'?'Original sample restored. History cleared; reset has no Undo.':saved?'Change saved. Original evidence preserved.':'Change applied in memory. Saving failed.')
+  focusBack()
+ }
+ useEffect(()=>{if(selected){drawer.current?.scrollTo(0,0);drawer.current?.focus()}},[selected])
+ useEffect(()=>{if(draft)editor.current?.querySelector<HTMLInputElement>('input')?.focus()},[draft])
+ useEffect(()=>{if(evaluation){bench.current?.scrollIntoView({block:'start'});bench.current?.focus()}},[evaluation])
+ const asset=assets.find(a=>a.id===selected)
+ return <><header><a className="brand" href="#search">N<span>ORTHSTAR</span> / FINDABILITY LAB</a><span className="fictional">FICTIONAL COLLECTION · 06 ASSETS</span></header><main id="search"><div className="intro"><div><span className="eyebrow">COLLECTION / FIELD STUDIES</span><h1>Find the asset.<br/><em>Understand the match.</em></h1><p>A small library for explicit intent. Search titles and controlled tags, inspect the evidence, and review one correction at a time.</p></div><div className="intro-note"><span>01 / THE EXPERIMENT</span><p>“Morning commuter” is missing its bicycle tag. Find the omission, review the correction, compare the fixed query set.</p><button onClick={()=>{setSelected('A02');setDraft(null)}}>Inspect missing item A02 ↗</button></div></div>
+ <section className="search-panel" aria-label="Search controls"><label className="query-label">Search the collection<input ref={searchInput} value={view.query} onChange={e=>changeView({...view,query:e.target.value})} placeholder="Try bicycle" type="search"/></label><div className="facets"><label>Search scope<select value={view.scope} onChange={e=>changeView({...view,scope:e.target.value as View['scope']})}><option value="all">Title + tags</option><option value="title">Title only</option><option value="tags">Tags only</option></select></label><label>Asset type<select value={view.type} onChange={e=>changeView({...view,type:e.target.value})}><option>All</option><option>Illustration</option><option>Poster</option></select></label><label>Collection<select value={view.collection} onChange={e=>changeView({...view,collection:e.target.value})}><option>All</option><option>Field notes</option><option>Workshop</option></select></label></div><p className="rules">Every query token must match an exact whole token in the selected fields. {state.synonyms?'bike → bike OR bicycle.':'Synonym expansion off.'} Evidence text is excluded.</p></section>
+ <div className="toolbar"><span role="status">{results.length} of 6 results · query “{view.query||'(empty)'}” · {view.scope} · {view.type} · {view.collection}</span><div>{previousView&&<button onClick={()=>{setView(previousView);setPreviousView(null);setMessage('Previous search view restored.');searchInput.current?.focus()}}>Restore previous view</button>}<button onClick={()=>setEvaluation(!evaluation)}>{evaluation?'Hide':'Compare'} query fixtures</button><button onClick={()=>capture({kind:'policy',before:state.synonyms,after:!state.synonyms})}>Review synonym policy</button></div></div>
+ <p className="announcement" role="status">{message}</p>{warning&&<div className="warning" role="alert">{warning}</div>}
+ {results.length===0?<section className="empty"><h2>No assets in this view</h2><p>{assets.some(a=>queryMatch(a.id,state,view))?'The query matches assets, but active facets exclude every match.':'No record matches every query token in this scope. Changing facets cannot fix this query mismatch.'}</p><button onClick={()=>{changeView({...view,type:'All',collection:'All'});searchInput.current?.focus()}}>Clear facets</button><button onClick={()=>{changeView({...view,query:''});searchInput.current?.focus()}}>Clear query</button><p>Both actions can be reversed with Restore previous view.</p></section>:<div className="asset-grid">{results.map(a=><article key={a.id}><button className="asset-open" onClick={()=>{trigger.current=document.activeElement as HTMLElement;setSelected(a.id);setDraft(null)}} aria-label={`Inspect ${a.title}`}><img src={`${import.meta.env.BASE_URL}media/${a.id}.svg`} alt={`Original fictional artwork: ${a.title}`}/><div className="asset-info"><span className="eyebrow">{a.id} / {a.type}</span><h2>{a.title}</h2><p>{state.tags[a.id].join(' · ')}</p><span className="match-line">{view.query?explain(a.id,state,view).map(t=>`${t.term}: ${t.fields.join(' + ')}`).join(' / '):'Empty query includes every asset'} ↗</span></div></button></article>)}</div>}
+ {evaluation&&<section ref={bench} tabIndex={-1}><Evaluation state={state} onQuery={q=>{changeView({...initialView,query:q});searchInput.current?.focus()}}/></section>}
+ <footer><p>Original fictional records. Mo: product/program direction. AI: implementation and verification assistance.</p><div><button onClick={()=>capture('reset')}>Review reset sample</button>{state.history.length>0&&<button onClick={()=>capture(inverse(state.history.at(-1)!))}>Review Undo latest edit</button>}<a href={`${import.meta.env.BASE_URL}docs/product/Case_Study.md`}>Product case ↗</a></div></footer></main>
+ {asset&&<aside ref={drawer} tabIndex={-1} className="drawer" aria-label="Asset metadata" onKeyDown={e=>{if(e.key==='Escape'&&!preview){setSelected(null);setDraft(null);focusBack()}}}><div className="drawer-top"><span className="eyebrow">METADATA / {asset.id}</span><button onClick={()=>{setSelected(null);setDraft(null);setPreview(null);focusBack()}}>Close metadata</button></div><h2>{asset.title}</h2><img className="drawer-art" src={`${import.meta.env.BASE_URL}media/${asset.id}.svg`} alt="Original fictional artwork"/><p>{asset.type} · {asset.collection}</p><h3>Original evidence</h3><p>{asset.evidence}</p><p>Original tags: {asset.tags.join(', ')}</p><h3>Current controlled tags</h3><p>{state.tags[asset.id].join(', ')||'No tags'}</p><h3>Why it appears or disappears</h3><p>{explain(asset.id,state,view).map(t=>`${t.term}${t.expanded.length>1?' (bike OR bicycle)':''}: ${t.fields.join(' + ')||'no field matched'}`).join('; ')||'Empty query matches all records.'}</p><p>{queryMatch(asset.id,state,view)?'Matches the query.':'Query mismatch.'} {(view.type!=='All'&&view.type!==asset.type)||(view.collection!=='All'&&view.collection!==asset.collection)?'Excluded by active facets.':'Passes active facets.'}</p>
+ {draft?<fieldset ref={editor}><legend>Choose controlled tags for {asset.id}</legend>{vocabulary.map(t=><label className="check" key={t}><input type="checkbox" checked={draft.includes(t)} onChange={()=>setDraft(draft.includes(t)?draft.filter(x=>x!==t):[...draft,t])}/>{t}</label>)}<button onClick={()=>{setDraft(null);requestAnimationFrame(()=>drawer.current?.querySelector<HTMLButtonElement>('[data-edit]')?.focus())}}>Cancel tag edit</button><button className="primary" disabled={JSON.stringify(draft)===JSON.stringify(state.tags[asset.id])} onClick={()=>capture({kind:'tags',id:asset.id,before:state.tags[asset.id],after:draft})}>Preview tag change</button></fieldset>:<button data-edit onClick={()=>setDraft([...state.tags[asset.id]])}>Edit controlled tags</button>}
+ <h3>Preserved history · revision {state.revision}</h3><ol>{state.history.map((h,i)=><li key={i}>{h.kind==='tags'?`${h.id}: ${h.before.join(', ')} → ${h.after.join(', ')}`:`Synonyms: ${h.before?'on':'off'} → ${h.after?'on':'off'}`}</li>)}</ol></aside>}
+ {preview&&<ReviewDialog title={preview.edit==='reset'?'Restore the original sample?':preview.edit.kind==='tags'?`Change tags on ${preview.edit.id}?`:'Change the synonym policy?'} onCancel={()=>{setPreview(null);setMessage('Review canceled. Nothing changed.');focusBack()}} onConfirm={confirm}>{preview.edit==='reset'?<p>Replace all saved tags, policy and edit history with the original sample. Invalid saved bytes will be replaced. Reset has no Undo.</p>:preview.edit.kind==='tags'?<><p>Only record {preview.edit.id} changes. Original evidence stays intact.</p><p>Before: {preview.edit.before.join(', ')||'none'}</p><p>After: {preview.edit.after.join(', ')||'none'}</p><p>Query result count: {results.length} → {search(apply(state,preview.edit),view).length}.</p></>:<><p>Before: {state.synonyms?'bike expands to bike OR bicycle':'no synonym expansion'}</p><p>After: {preview.edit.after?'bike expands to bike OR bicycle':'no synonym expansion'}</p><p>The same four fixture labels remain fixed. Affects queries containing bike only.</p></>}</ReviewDialog>}
+ </>
+}
