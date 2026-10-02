@@ -34,7 +34,7 @@ export function parse(raw:string):State {
   }else throw Error('Unknown history kind')
   replay=apply(replay,h)
  }
- if(!equal(replay.tags,x.tags)||replay.synonyms!==x.synonyms)throw Error('State disagrees with history')
+ if(!assets.every(a=>equal(replay.tags[a.id],x.tags[a.id]))||replay.synonyms!==x.synonyms)throw Error('State disagrees with history')
  return x
 }
 const tokens=(s:string):string[]=>s.toLowerCase().match(/[a-z0-9]+/g)||[]

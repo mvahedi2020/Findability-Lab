@@ -37,7 +37,7 @@ export function App(){
   if(current.kind==='invalid'&&preview.edit!=='reset'){setPreview(null);setWarning('Saved sample is invalid. Review a reset to replace it.');focusBack();return}
   const next=preview.edit==='reset'?initial():apply(state,preview.edit)
   const saved=write(next);if(saved)savedRaw.current=JSON.stringify(next);setState(next);setPreview(null);setDraft(null)
-  setWarning(saved?'':'Storage unavailable. Change is in this tab only; refresh may lose it.')
+  setWarning(saved&&current.kind!=='unavailable'?'':'Storage unavailable. Memory remains usable; persistence cannot be verified. Refresh may lose changes.')
   setMessage(preview.edit==='reset'?'Original sample restored. History cleared; reset has no Undo.':saved?'Change saved. Original evidence preserved.':'Change applied in memory. Saving failed.')
   focusBack()
  }
