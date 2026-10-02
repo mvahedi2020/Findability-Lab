@@ -1,0 +1,12 @@
+# Exact fictional walkthrough
+1. Start at the default bicycle query, Title + tags, All types, All collections. The two results are A01/A03. Each explains bicycle in title + tags.
+2. Choose Inspect missing item A02. The focused metadata drawer shows the original rider evidence and commute/urban intake tags. It explains bicycle: no field matched; query mismatch; active facets pass.
+3. Choose Edit controlled tags. Check bicycle. Preview tag change shows only A02, before commute/urban, after commute/urban/bicycle and result count 2 → 3. Cancel preserves the draft but writes nothing; Cancel tag edit discards draft. Repeat and Confirm change to save.
+4. Focus returns to Edit controlled tags. Original evidence/tags remain visible; current tags include bicycle. The query explanation now says bicycle: tags. Close metadata and compare query fixtures: original/current usefulness 1/2 → 2/3; missing 1/2 → 0/2. A03 remains irrelevant to the full-scene intent. Coast/urban portrait controls remain 1/1 usefulness and 0/1 missing.
+5. Hide comparison if desired. Select Poster for Asset type. No assets remain: query matches exist but facets exclude them. Clear facets restores the three current results; Restore previous view reverses the recovery.
+6. Change query to meteor. The message identifies query mismatch. Clear query shows all assets that pass the current facets; Restore previous view returns meteor.
+7. Use bike with All facets. Review synonym policy, Cancel to preserve it; preview again and Confirm to turn it off. bike has no results. Comparison reports undefined 0/0 usefulness and missing 2/2. Review Undo latest edit previews restoring only the policy; A02's correction remains.
+8. Refresh restores compatible durable edits and starts default bicycle view. Escape closes metadata; Escape cancels a review. Tab/Shift+Tab stay in the native modal review and focus returns on action.
+9. Review reset sample states that all edits/history are replaced with the original sample, without Undo. Cancel keeps state. Confirm restores baseline.
+
+Invalid saved bytes are preserved, edits are blocked, and Review reset sample remains reachable after closing the drawer. A changed saved value during review rejects the stale preview; a valid external change before review asks for reload or reset. Unavailable storage keeps memory and visibly warns. These cases are simulated in production browser tests, not real user incidents. Exact evidence/publication status is in Validation.md.
