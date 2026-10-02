@@ -9,5 +9,12 @@ Actual desktop, mobile320 and tag-preview screenshots were inspected. Entry and 
 ## Proposed human evaluation — not performed
 Recruit collection editors for four tasks: find the intended scene; explain why a returned asset matched; recover a facet exclusion; review a tag correction and describe its scope. Measure successful task completion as completed/attempted tasks, explanation accuracy against actual field rules, recovery success, and correction usefulness with reasons. Observe time descriptively; no performance claim is justified by this sample. Ask editors to critique the fixed relevance labels and terminology policy. Mo's personal product review/comprehension remains unobserved.
 
-## Release status and remaining gates
-Local implementation and S043–S051 evidence complete. S052 local release checks complete; independent primary review, public repository creation/push, Actions/Pages publication, local/public head agreement, build/live parity and profile reviewer routes remain pending until the primary assistant verifies them. This agent has no remote or publication permission. No live publication or human-validation claim is made. All other documents refer here for release status.
+## Release evidence — October 2, 2026
+
+The primary reviewer independently replayed the A02 tag correction, canceled then confirmed the scoped preview, checked retained original evidence, compared the unchanged fixture labels, recovered facet exclusion, turned off the directional synonym and observed undefined 0/0 usefulness, reversed the policy only, and refreshed. Three corrected results remained. The 320px page had no horizontal overflow and no page or console errors were reported.
+
+Initial release `e173604f2c6de7701278863ee089d03e72d4731e` passed [GitHub verification and Pages deployment](https://github.com/mvahedi2020/Findability-Lab/actions/runs/36989124310). Local HEAD matched public main, the worktree was clean, and all **16 deployed files** matched the local production build and the GitHub deployment artifact byte for byte. The live page rendered its expected entry controls without reported page/console errors. All original SVG media loaded.
+
+The public [profile](https://github.com/mvahedi2020) links the case study, PRD, walkthrough and [live demo](https://mvahedi2020.github.io/Findability-Lab/). The assistant delivery and publication work is complete for this bounded prototype. Final documentation revisions repeat the verification/publication pipeline; the private delivery ledger records final-head parity. These are point-in-time software observations, not uptime or commercial-outcome claims.
+
+Mo's personal comprehension and endorsement of provisional choices, and actual human evaluation, remain unobserved. Software checks cannot establish those findings. This is the publication-status record referenced by the other product documents.

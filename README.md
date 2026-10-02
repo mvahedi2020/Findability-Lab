@@ -1,5 +1,7 @@
 # Findability Lab
 
+[Open the live demo](https://mvahedi2020.github.io/Findability-Lab/) · [Public source](https://github.com/mvahedi2020/Findability-Lab) · [Release evidence](docs/product/Validation.md)
+
 An original fictional Northstar asset library for explicit search intent, explainable metadata and controlled correction. Mo owns product/program direction; AI assists implementation and verification. No human study or commercial outcome is claimed.
 
 Search the six original assets, apply visible facets, inspect why an asset matched, preview a controlled one-record tag correction, compare fixed query labels, and recover from empty results. Search is exact lexical matching; the only optional synonym is bike → bike/bicycle. All data/artwork is fictional and authored for this prototype. No live AI, auth, analytics or external requests.
