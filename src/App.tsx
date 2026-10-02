@@ -7,6 +7,7 @@ type Preview={edit:Edit|'reset';state:string;raw:string|null;context:string;kind
 export function App(){
  const [loaded]=useState(read)
  const [state,setState]=useState<State>(loaded.state)
+ const savedRaw=useRef(loaded.raw)
  const [view,setView]=useState<View>(initialView)
  const [previousView,setPreviousView]=useState<View|null>(null)
  const [selected,setSelected]=useState<Id|null>(null)
@@ -28,13 +29,14 @@ export function App(){
   trigger.current=document.activeElement as HTMLElement
   const current=read()
   if(current.kind==='invalid'&&edit!=='reset'){setWarning('Saved sample is invalid. Its bytes are preserved. Review a reset to replace it.');setMessage('Change blocked by invalid saved data.');return}
+  if(edit!=='reset'&&current.kind==='ok'&&current.raw!==savedRaw.current){setMessage('Saved data changed in another context. Reload to use it, or review reset.');return}
   setPreview({edit,state:JSON.stringify(state),raw:current.raw,context,kind:current.kind})
  }
  function confirm(){if(!preview)return;const current=read()
   if(preview.state!==JSON.stringify(state)||preview.context!==context||(current.kind!=='unavailable'&&(current.raw!==preview.raw||preview.kind==='unavailable'))){setPreview(null);setMessage('Preview is stale. Saved data or context changed; review again.');if(current.kind==='invalid')setWarning('Saved sample is invalid. Its bytes are preserved. Review a reset to replace it.');focusBack();return}
   if(current.kind==='invalid'&&preview.edit!=='reset'){setPreview(null);setWarning('Saved sample is invalid. Review a reset to replace it.');focusBack();return}
   const next=preview.edit==='reset'?initial():apply(state,preview.edit)
-  const saved=write(next);setState(next);setPreview(null);setDraft(null)
+  const saved=write(next);if(saved)savedRaw.current=JSON.stringify(next);setState(next);setPreview(null);setDraft(null)
   setWarning(saved?'':'Storage unavailable. Change is in this tab only; refresh may lose it.')
   setMessage(preview.edit==='reset'?'Original sample restored. History cleared; reset has no Undo.':saved?'Change saved. Original evidence preserved.':'Change applied in memory. Saving failed.')
   focusBack()
