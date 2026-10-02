@@ -23,7 +23,7 @@ export function App(){
  const trigger=useRef<HTMLElement|null>(null)
  const results=search(state,view)
  const context=JSON.stringify({selected,view})
- function focusBack(){requestAnimationFrame(()=>{if(trigger.current?.isConnected)trigger.current.focus();else if(selected)drawer.current?.querySelector<HTMLButtonElement>('[data-edit]')?.focus();else searchInput.current?.focus()})}
+ function focusBack(){requestAnimationFrame(()=>{if(trigger.current?.isConnected)trigger.current.focus();else if(selected&&drawer.current)drawer.current?.querySelector<HTMLButtonElement>('[data-edit]')?.focus();else searchInput.current?.focus()})}
  function changeView(next:View){setPreviousView(view);setView(next);setPreview(null);setMessage('Search view changed. Restore previous view is available.')}
  function capture(edit:Edit|'reset'){
   trigger.current=document.activeElement as HTMLElement
