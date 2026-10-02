@@ -13,3 +13,5 @@
 | Explicit destructive reset without Undo | Restore invalid raw storage | Invalid bytes are preserved until reset; reset permanently discards saved edits/history. |
 
 Choices are visibly provisional until proposed human evaluation. No research, commercial result or manual-coding claim is implied. Release status is maintained in Validation.md.
+
+When saved storage cannot be read, durable writes are not attempted even if writing would succeed. Confirmed edits and reset affect memory only; unseen saved bytes remain intact. The review explicitly discloses this boundary.

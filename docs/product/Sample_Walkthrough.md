@@ -10,3 +10,5 @@
 9. Review reset sample states that all edits/history are replaced with the original sample, without Undo. Cancel keeps state. Confirm restores baseline.
 
 Invalid saved bytes are preserved, edits are blocked, and Review reset sample remains reachable after closing the drawer. A changed saved value during review rejects the stale preview; a valid external change before review asks for reload or reset. Unavailable storage keeps memory and visibly warns. These cases are simulated in production browser tests, not real user incidents. Exact evidence/publication status is in Validation.md.
+
+When saved storage cannot be read, durable writes are not attempted even if writing would succeed. Confirmed edits and reset affect memory only; unseen saved bytes remain intact. The review explicitly discloses this boundary.
