@@ -37,7 +37,7 @@ export function parse(raw:string):State {
  if(!equal(replay.tags,x.tags)||replay.synonyms!==x.synonyms)throw Error('State disagrees with history')
  return x
 }
-const tokens=(s:string)=>s.toLowerCase().match(/[a-z0-9]+/g)||[]
+const tokens=(s:string):string[]=>s.toLowerCase().match(/[a-z0-9]+/g)||[]
 export function explain(id:Id,state:State,view:View){
  const a=assets.find(a=>a.id===id)!
  return tokens(view.query).map(term=>{

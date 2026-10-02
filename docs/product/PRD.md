@@ -1,0 +1,12 @@
+# Product requirements
+Primary user: fictional collection editor with an explicit asset intent. Entry query bicycle produces A01/A03, exposing the missing A02. Search input, field scope, facets, counts and actual matching fields remain visible. Query is an AND over whole tokens; facets also combine with AND. Empty query includes all six records. Evidence is not searchable.
+
+Metadata opens in a compact side drawer and receives focus. It shows immutable intake evidence, original/current tags, query matching fields, facet exclusion and preserved history. Controlled tag editing affects one selected ID; preview shows before/after and current-view counts. No automatic tagging is implied.
+
+The small synonym policy exposes only directional bike expansion. Its durable toggle requires review/cancel/confirm. Query comparison uses fixed labels and explicit numerator/denominator; original/current evaluations are both reproducible. Zero returned denominator is undefined rather than perfect usefulness.
+
+No-results distinguishes query mismatch from facet exclusion. Clear query and clear facets save one recoverable prior view; changes are session-only. Compatible refresh preserves durable edits and resets view. Invalid storage is never overwritten without reviewed reset; unavailable persistence warns and keeps memory. Confirmation checks raw saved bytes and full view/selection/state context. Undo previews the inverse of only the latest edit. Reset explicitly loses all edit history and has no Undo.
+
+Keyboard: inputs/selects/buttons support native navigation, drawer/edit/bench receive focus, Escape closes drawer or cancels dialog, dialog traps focus with native modal behavior and returns it to the initiating control or selected edit button. At 320px controls wrap, cards stack and comparison table scrolls within its own region. No external network, login, telemetry or live search.
+
+Acceptance work packages: S043 brief/problem/alternative; S044 Sample Contract/rules/state; S045 static Node24/Vite foundation; S046 App search/facets/counts; S047 metadata/tag/policy reviews; S048 matching-field explanation and reversible emptiness; S049 Evaluation and independent fixtures; S050 journal/schema/storage/recovery; S051 keyboard/mobile/browser evidence and case story; S052 local release gates with publication tracked in Validation.md. Personal product comprehension and human evaluation remain open.

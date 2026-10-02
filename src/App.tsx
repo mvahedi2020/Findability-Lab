@@ -23,7 +23,7 @@ export function App(){
  const trigger=useRef<HTMLElement|null>(null)
  const results=search(state,view)
  const context=JSON.stringify({selected,view})
- function focusBack(){requestAnimationFrame(()=>{if(trigger.current?.isConnected)trigger.current.focus();else searchInput.current?.focus()})}
+ function focusBack(){requestAnimationFrame(()=>{if(trigger.current?.isConnected)trigger.current.focus();else if(selected)drawer.current?.querySelector<HTMLButtonElement>('[data-edit]')?.focus();else searchInput.current?.focus()})}
  function changeView(next:View){setPreviousView(view);setView(next);setPreview(null);setMessage('Search view changed. Restore previous view is available.')}
  function capture(edit:Edit|'reset'){
   trigger.current=document.activeElement as HTMLElement
@@ -42,7 +42,8 @@ export function App(){
   focusBack()
  }
  useEffect(()=>{if(selected){drawer.current?.scrollTo(0,0);drawer.current?.focus()}},[selected])
- useEffect(()=>{if(draft)editor.current?.querySelector<HTMLInputElement>('input')?.focus()},[draft])
+ const editing=draft!==null
+ useEffect(()=>{if(editing)editor.current?.querySelector<HTMLInputElement>('input')?.focus()},[editing])
  useEffect(()=>{if(evaluation){bench.current?.scrollIntoView({block:'start'});bench.current?.focus()}},[evaluation])
  const asset=assets.find(a=>a.id===selected)
  return <><header><a className="brand" href="#search">N<span>ORTHSTAR</span> / FINDABILITY LAB</a><span className="fictional">FICTIONAL COLLECTION · 06 ASSETS</span></header><main id="search"><div className="intro"><div><span className="eyebrow">COLLECTION / FIELD STUDIES</span><h1>Find the asset.<br/><em>Understand the match.</em></h1><p>A small library for explicit intent. Search titles and controlled tags, inspect the evidence, and review one correction at a time.</p></div><div className="intro-note"><span>01 / THE EXPERIMENT</span><p>“Morning commuter” is missing its bicycle tag. Find the omission, review the correction, compare the fixed query set.</p><button onClick={()=>{setSelected('A02');setDraft(null)}}>Inspect missing item A02 ↗</button></div></div>
