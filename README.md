@@ -34,3 +34,5 @@ npm run preview
 Open http://127.0.0.1:4190/Findability-Lab/. Only port4190 is used. Production base is `/Findability-Lab/`; product docs are copied into the production build. Storage key is `northstar-findability-v1`. Query/facet/scope changes are session-only and have one prior-view restoration; compatible refresh preserves confirmed tags/policy/history. Invalid storage is preserved until reviewed reset. Storage failures keep memory with warning. Undo reverses only the latest edit; reset has no Undo.
 
 The main tradeoff is transparency versus terminology coverage: an editor can explain exact fields and make a scoped correction, while whole-token matching still misses spelling variations and the wheel detail remains a false positive for full-scene intent. Fixed relevance labels are author judgment, not user research; no human evaluation has been conducted.
+
+Read the [product documents](https://mvahedi2020.github.io/Findability-Lab/docs/index.html) in the styled reading guide. Canonical Markdown remains in `docs/`.
