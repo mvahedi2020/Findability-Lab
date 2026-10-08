@@ -1,5 +1,9 @@
 # Case study: make an omission inspectable
 
+Find an image for a specific task and understand why a search result matches or is missing. Correct one missing tag and see which search problems it solves—and which it leaves open.
+
+**The product choice:** Make search rules and corrections understandable instead of hiding their limitations. [Try the sample](https://mvahedi2020.github.io/Findability-Lab/) · [Follow the walkthrough](Sample_Walkthrough.md).
+
 ## User and decision
 
 A fictional collection editor knows the intended bicycle scene, yet the asset title Morning commuter and intake tags commute/urban do not match bicycle. The product choice is to show the lexical rules and original evidence beside a controlled one-record correction. A search-first library with a compact metadata drawer keeps the explicit intent visible.
