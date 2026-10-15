@@ -1,4 +1,16 @@
 # Product requirements
+
+## Product decision brief
+
+**Primary user:** A collection editor trying to find an asset for a specific task.
+
+**Problem hypothesis:** An asset may be absent because of missing metadata, while a matching result may still be wrong for the intended task.
+
+**Scope choice:** Expose why results match or are excluded, and let the editor review one metadata correction before expanding search policy.
+
+**Evidence needed:** Judge successful find tasks and the editor’s explanation of the correction in proposed sessions. Fixed relevance labels are authored examples, not observed customer judgments.
+
+The [case study](Case_Study.md) explains the experience connection, alternatives and cost of the choice. The requirements below describe the bounded fictional prototype.
 Primary user: fictional collection editor with an explicit asset intent. Entry query bicycle produces A01/A03, exposing the missing A02. Search input, field scope, facets, counts and actual matching fields remain visible. Query is an AND over whole tokens; facets also combine with AND. Empty query includes all six records. Evidence is not searchable.
 
 Metadata opens in a compact side drawer and receives focus. It shows immutable intake evidence, original/current tags, query matching fields, facet exclusion and preserved history. Controlled tag editing affects one selected ID; preview shows before/after and current-view counts. No automatic tagging is implied.
