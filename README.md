@@ -6,6 +6,8 @@ Find an image for a specific task and understand why a search result matches or 
 
 **Try it:** Search for bicycle, inspect the missing scene, and preview its tag correction before confirming it. [Open the demo](https://mvahedi2020.github.io/Findability-Lab/) · [Follow the walkthrough](docs/product/Sample_Walkthrough.md).
 
+**Experience connection:** My work at 5th Kind covered enterprise search, and my Oracle work included tagging and metadata. This example connects those areas by asking whether missing information or search policy is causing a failed find task. [Read the decision to challenge](docs/product/Case_Study.md#experience-and-decision).
+
 Mo owns the product direction and requirements. AI tools assisted implementation and verification.
 
 Search the six original assets, apply visible facets, inspect why an asset matched, preview a controlled one-record tag correction, compare fixed query labels, and recover from empty results. Search is exact lexical matching; the only optional synonym is bike → bike/bicycle. All data/artwork is fictional and authored for this prototype. No live AI, auth, analytics or external requests.

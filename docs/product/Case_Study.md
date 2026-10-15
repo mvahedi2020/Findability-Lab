@@ -4,6 +4,12 @@ Find an image for a specific task and understand why a search result matches or 
 
 **The product choice:** Make search rules and corrections understandable instead of hiding their limitations. [Try the sample](https://mvahedi2020.github.io/Findability-Lab/) · [Follow the walkthrough](Sample_Walkthrough.md).
 
+## Experience and decision
+
+My work at 5th Kind covered enterprise search, and my Oracle work included tagging and metadata. This example connects those areas by asking whether missing information or search policy is causing a failed find task. This is a separate fictional portfolio exercise; its records, rules and results do not reproduce an employer system.
+
+**Decision to challenge:** Should the next investment improve metadata, vocabulary coverage or ranking? Making a missing asset findable can still leave an irrelevant result, so a higher recall number does not settle the decision.
+
 ## User and decision
 
 A fictional collection editor knows the intended bicycle scene, yet the asset title Morning commuter and intake tags commute/urban do not match bicycle. The product choice is to show the lexical rules and original evidence beside a controlled one-record correction. A search-first library with a compact metadata drawer keeps the explicit intent visible.
